@@ -3,7 +3,10 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body {font-family: Arial, Helvetica, sans-serif;}
+body {
+font-family: Arial, Helvetica, sans-serif;
+margin: 0px;
+}
 
 /* Full-width input fields */
 input[type=text], input[type=password] {
@@ -28,6 +31,12 @@ button {
 
 button:hover {
   opacity: 0.8;
+}
+
+.header {
+  background-color: #e0e0e0;
+  margin: 0px;
+  padding: 1px;
 }
 
 /* Extra styles for the cancel button */
@@ -126,8 +135,13 @@ span.psw {
 </style>
 </head>
 <body>
-<div style=" margin: auto; width: 30%; padding: 10px; border: 3px solid #73AD21">
-<h2 style="text-align: center;">Modal Login Form</h2>
+<div class="header">
+    <img src="https://th.bing.com/th/id/R.7fa3cb7910152a31cb025bbacb9ca38c?rik=gsHmAXKZIDFj1g&riu=http%3a%2f%2fcampusmontanha.yolasite.com%2fresources%2f386px-Logotipo_IFET.png&ehk=Gx5SrlD%2b1OExNKJqCp70B1GzIZU9zHWYfhB9LMubK4k%3d&risl=&pid=ImgRaw&r=0" height=37px style="float: right; margin:5px;">
+    <p style="margin-left: 15px; font-size:15px">Trabalho Poo - Login</p>
+</div>
+<p style="padding:20px;"></p>
+<div style=" margin: auto; width: 35%; padding: 10px; border: 3px solid #73AD21">
+<h2 style="text-align: center;">Sistema de Pesquisa de Artigos</h2>
 
 <button onclick="document.getElementById('id01').style.display='block'" style="width:30%; margin-left: 35%;">Login</button>
 
@@ -135,27 +149,27 @@ span.psw {
 
 <div id="id01" class="modal">
 
-  <form class="modal-content animate" action="/profile" method="post" style="width:350px">
+  <form class="modal-content animate" action="/menu" method="POST" style="width:350px">
     <div class="imgcontainer">
       <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
     </div>
 
     <div class="container">
-      <label for="user"><b>Username</b></label>
-      <input type="text" placeholder="Enter Username" name="user" required>
+      <label for="user"><b>CPF</b></label>
+      <input type="text" placeholder="Coloque seu CPF (sem pontos)" name="user" required>
 
-      <label for="psswrdHsh"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="psswrdHsh" required>
+      <label for="psswrdHsh"><b>Senha</b></label>
+      <input type="password" placeholder="Coloque sua Senha" name="psswrdHsh" required>
 
       <button type="submit">Login</button>
       <label>
-        <input type="checkbox" checked="checked" name="remember"> Remember me
+        <input type="checkbox" checked="checked" name="remember"> Lembrar de mim
       </label>
     </div>
 
     <div class="container" style="background-color:#f1f1f1">
-      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-      <span class="psw">Forgot <a href="#">password?</a></span>
+      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancelar</button>
+      <span class="psw"><a href="/forgot_password">Esqueci a Senha</a></span>
     </div>
   </form>
 </div>

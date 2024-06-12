@@ -17,6 +17,25 @@ def profile():
     return render_template("home.html")
 
 
+@views.route("/forgot_password")
+def forgot_password():
+    email = request.args.get("email")
+    # inserir codigo que manda enviar o email
+    if email != None:
+        return render_template("forgot_password.html", sucess="false")
+    return render_template("forgot_password.html", sucess="true")
+
+
+@views.route("/menu", methods=["GET","POST"])
+def menu():
+    form = request.form
+    cpf = form.get('user')
+    password = form.get('psswrdHsh')
+    # botar codigo que confirma se o usuario é valido
+    # se usuario não for valido, mandar para a pagina de login de novo
+    return render_template("home.html", user=cpf)
+
+
 @views.route("/json")
 def get_json():
     return jsonify({"name": "Tim", "Coolness": 10})
