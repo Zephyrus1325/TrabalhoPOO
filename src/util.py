@@ -4,10 +4,9 @@ def gerar_senha():
     return nova_senha
 
 
-
 def enviar_email(email_usuario, nova_senha):
     import smtplib
-    from email.mime.text import MIMEText  #pra codificar as mensagen 
+    from email.mime.text import MIMEText  # pra codificar as mensagen
     sender = "geraldosena371@gmail.com"
     body = f"Sua nova senha: {nova_senha}"
     subject = "Nova senha"
@@ -15,8 +14,8 @@ def enviar_email(email_usuario, nova_senha):
 
     # Criação da mensagem MIME
     msg = MIMEText(body)
-    msg['Subject'] = subject  # Assunto do email
-    msg['From'] = sender  # Remetente
+    msg['Subject'] = subject   # Assunto do email
+    msg['From'] = sender       # Remetente
     msg['To'] = email_usuario  # Destinatário
 
     try:
@@ -28,7 +27,7 @@ def enviar_email(email_usuario, nova_senha):
             smtp_server.sendmail(sender, email_usuario, msg.as_string())
         return True, 44
     except smtplib.SMTPException as e:
-        return False, 97 #erro na smtplib
+        return False, 97    # erro na smtplib
     except Exception as e:
-        return False, 99 #outro erro
+        return False, 99    # outro erro
 

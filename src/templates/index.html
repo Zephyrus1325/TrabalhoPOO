@@ -149,7 +149,7 @@ span.psw {
 
 <div id="id01" class="modal">
 
-  <form class="modal-content animate" action="/menu" method="POST" style="width:350px">
+  <form class="modal-content animate" action="/menu" method="POST" style="width:350px; height:400px;">
     <div class="imgcontainer">
       <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
     </div>
@@ -167,9 +167,13 @@ span.psw {
       </label>
     </div>
 
-    <div class="container" style="background-color:#f1f1f1">
+    <div class="container" style="background-color:#f1f1f1; height:80px">
       <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancelar</button>
-      <span class="psw"><a href="/forgot_password">Esqueci a Senha</a></span>
+      <span class="psw">
+      	<a href="/register_user">Registre-se</a>
+        <p>
+      	<a href="/forgot_password">Esqueci a Senha</a>
+      </span>
     </div>
   </form>
 </div>

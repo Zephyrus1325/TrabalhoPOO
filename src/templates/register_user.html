@@ -1,10 +1,190 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+font-family: Arial, Helvetica, sans-serif;
+margin: 0px;
+}
+
+/* Full-width input fields */
+input, select {
+  width: 50%;
+  padding: 12px 10px;
+  margin: 8px 20px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.form-text {
+	padding-left: 20px;
+}
+
+/* Set a style for all buttons */
+button {
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 90px;
+  border: none;
+  cursor: pointer;
+
+  width: 30%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+form {
+	width: 60%;
+    height: 700px;
+    border: 5px solid #04AA6D;
+    margin: auto
+}
+
+.header {
+  background-color: #e0e0e0;
+  margin: 0px;
+  padding: 1px;
+}
+
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+</style>
 </head>
 <body>
+<div class="header">
+    <img src="https://th.bing.com/th/id/R.7fa3cb7910152a31cb025bbacb9ca38c?rik=gsHmAXKZIDFj1g&riu=http%3a%2f%2fcampusmontanha.yolasite.com%2fresources%2f386px-Logotipo_IFET.png&ehk=Gx5SrlD%2b1OExNKJqCp70B1GzIZU9zHWYfhB9LMubK4k%3d&risl=&pid=ImgRaw&r=0" height=37px style="float: right; margin:5px;">
+    <p style="margin-left: 15px; font-size:15px">Trabalho Poo - Registrar Usuário</p>
+</div>
+
+<p style="padding:10px;"></p>
+    <div id="success" style="width:auto; background-color:#ffe0e0; border:10px;">
+        <p style="text-align:center; padding:10px">Usuario registrado com sucesso! Redirecionando...</p>
+    </div>
+
+
+<div>
+  <form action="/add_user" method="POST">
+  	<br>
+  	<label for="username" class="form-text">Nome Completo</label><br>
+    <input type="text" placeholder="Insira seu nome aqui" user_name="username" required>
+
+    <br>
+    <label for="age" class="form-text">Idade</label><br>
+    <input type="age" age="age" maxlength="3" required style="width:10%">
+
+    <br>
+    <label for="email" class="form-text">Email</label><br>
+    <input type="email" placeholder="Insira seu email aqui" email="email" required>
+
+    <!-- Trecho com as coisas do CEP (tem que automatizar isso (aff)) -->
+
+    <br>
+    <label for="cep" class="form-text">CEP</label><br>
+    <input type="text" placeholder="insira CEP" cep="cep" required style="width: 20%;" onchange="checkCEP(this.value)">
+
+    <br>
+    <label for="street" class="form-text">Rua</label><br>
+    <input type="text" placeholder="insira sua Rua" street="street" required>
+
+    <br>
+    <label for="street" class="form-text">Cidade</label><br>
+    <input type="text" placeholder="insira sua Cidade" street="street" required style="width:30%">
+
+    <br>
+    <label for="state" class="form-text">Estado</label><br>
+    <select state="state" style="width:10%">
+    	<option value="Acre">AC</option>
+    	<option value="Alagoas">AL</option>
+    	<option value="Amapá">AP</option>
+    	<option value="Amazonas">AM</option>
+        <option value="Bahia">BA</option>
+    	<option value="Ceará">CE</option>
+    	<option value="Distrito Federal">DF</option>
+    	<option value="Espírito Santo">ES</option>
+        <option value="Goiás">GO</option>
+    	<option value="Maranhão">MA</option>
+    	<option value="Mato Grosso">MT</option>
+    	<option value="Mato Grosso do Sul">MS</option>
+        <option value="Minas Gerais">MG</option>
+    	<option value="Pará">PA</option>
+    	<option value="Paraíba">PB</option>
+        <option value="Paraná">PR</option>
+    	<option value="Pernambuco">PE</option>
+    	<option value="Piauí">PI</option>
+    	<option value="Rio de Janeiro">RJ</option>
+        <option value="Rio Grande do Norte">RN</option>
+    	<option value="Rio Grande do Sul">RS</option>
+        <option value="Rondônia">RO</option>
+    	<option value="Roraima">RR</option>
+    	<option value="Santa Catarina">SC</option>
+    	<option value="São Paulo">SP</option>
+        <option value="Sergipe">SE</option>
+    	<option value="Tocantins">TO</option>
+  	</select>
+
+    <br>
+    <label for="password" class="form-text">Senha</label><br>
+    <input type="password" placeholder="Insira sua senha aqui" passoword="password" required>
+
+    <br>
+    <button type="submit">Registrar</button>
+  </form>
+</div>
+
+<script>
+
+
+
+
+            document.addEventListener("DOMContentLoaded", function() {
+  loadPage();
+	});
+
+        function loadPage(){
+            const texto = document.getElementById("success");
+            if(true){
+                texto.style.opacity = "0.0"
+            } else {
+                texto.style.opacity = "1.0"
+                setTimeout(function () {window.location.href = "/";}, 4500);
+
+            }
+
+        }
+
+
+      function checkCEP(input) {
+            alert("The input value has changed. The new value is: " + input);
+      }
+
+
+
+    </script>
 
 </body>
 </html>
