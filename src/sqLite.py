@@ -30,7 +30,7 @@ def register_user(nome, idade, CPF, email, CEP, senha):
         return True, None  # Sucesso, sem erro
     except sqlite3.IntegrityError:
         return False, 1  # Erro: CPF já cadastrado
-    except Exception as e:
+    except Exception:
         return False, 2  # Outro erro
     finally:
         # Fecha a conexão
@@ -57,10 +57,10 @@ def esquece_senha(email):
             WHERE email = ?
             '''
             nova_senha = gerar_senha()  # Gera uma nova senha
-            cursor.execute(atualizar_senha, (nova_senha, email))  # Atualiza a senha no banco
+            cursor.execute(atualizar_senha, (nova_senha, email))  # Atualiza a pswd no db
             enviar_email(email, nova_senha)  # Envia nova senha para o e-mail
             return True, 0  # Operação bem-sucedida
-        except Exception as e:
+        except Exception:
             return False, 3  # Código de erro para qualquer outro erro
         finally:
             # Fecha a conexão com o banco de dados
@@ -93,8 +93,8 @@ def buscar_email_por_cpf(cpf):
         if resultado:
             return True, str(resultado[0])  # Retorna o e-mail, sem erro
         else:
-            return False, None  # Retorna None se o e-mail não foi encontrado, sem erro
-    except Exception as e:
+            return False, None  # não encontrou, retorna falso, sem erro
+    except Exception:
         return False, 45  # Retorna o erro
 
 
@@ -109,7 +109,7 @@ def email_existe(email):
             return True, None  # E-mail encontrado no banco de dados, sem erro
         else:
             return False, None  # E-mail não encontrado, sem erro
-    except Exception as e:
+    except Exception:
         return False, 6  # Código de erro
     finally:
         conn.close()  # Fecha a conexão com o banco de dados
@@ -126,7 +126,8 @@ def cpf_existe(cpf):
             return True, None  # CPF encontrado no banco de dados, sem erro
         else:
             return False, None  # CPF não encontrado, sem erro
-    except Exception as e:
+
+    except Exception:
         return False, 69  # Retorna 69 em caso de erro
     finally:
         conn.close()
