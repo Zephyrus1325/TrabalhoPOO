@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for
 from util import enviar_email, gerar_senha
+from sqLite import register_user
 views = Blueprint(__name__, "views")
 
 
@@ -7,14 +8,6 @@ views = Blueprint(__name__, "views")
 def home():
     return render_template("index.html")
 
-
-@views.route("/profile")
-def profile():
-    args = request.args
-    name = args.get("name")
-    if name != None:
-        return render_template("index.html", name=name)
-    return render_template("home.html")
 
 
 @views.route("/forgot_password")
@@ -24,11 +17,13 @@ def forgot_password():
     if email != None:
         return render_template("forgot_password.html", success="false")
     # se foi, renderiza também a mensagem de sucesso, e envia o email para o usuario
-    enviar_email(email, gerar_senha())
+
+    # todo remover isso aqui antes de dar deploy
+    # enviar_email(email, gerar_senha())
     return render_template("forgot_password.html", success="true")
 
 
-@views.route("/menu", methods=["GET","POST"])
+@views.route("/menu", methods=["GET", "POST"])
 def menu():
     form = request.form
     cpf = form.get('user')
@@ -42,11 +37,25 @@ def register():
     return render_template("register_user.html", success="true")
 
 
-@views.route("/add_user", methods=["POST"])
+@views.route("/add_user", methods=["GET","POST"])
 def add_user():
+    form = request.form
 
+    username = form.get("username")
+    age = form.get("age")
+    cpf = form.get("cpf")
+    email = form.get("email")
+    cep = form.get("cep")
+    street = form.get("street")
+    city = form.get("city")
+    state = form.get("state")
+    password = form.get("password")
+
+    cep_string = f"{cep}, {street}, {city}, {state}"
+    register_user(username, age, cpf, email, cep_string, password)
     return render_template("register_user.html", success="false")
     # return redirect(url_for("views.home"))
+
 
 @views.route("/json")
 def get_json():
