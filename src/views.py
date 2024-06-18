@@ -12,7 +12,7 @@ def home():
 
 @views.route("/forgot_password")
 def forgot_password():
-    email = request.args.get("email") # confere se foi recebido um email como parametro
+    email = request.args.get("email")  # confere se foi recebido um email como parametro
     # se não foi, renderiza a tela pedindo apenas o email
     if email != None:
         return render_template("forgot_password.html", success="false")
