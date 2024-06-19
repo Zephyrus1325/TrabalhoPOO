@@ -1,10 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:script="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0px;
+        }
+    .header {
+        background-color: #e0e0e0;
+        margin: 0px;
+        padding: 1px;
+        }
+    .content {
+        margin: auto;
+        width: 300px;
+        height: 350px;
+        padding: 0px 10px 0px 10px;
+        border: 2px solid gray;
+    }
+    /* Set a style for all buttons */
+    button {
+        background-color: #04AA6D;
+        color: white;
+        margin: auto;
+        width: 300px;
+        margin: 10px 0px;
+        height: 50px;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        opacity: 0.8;
+    }
+
+
+</style>
 <body>
-    <p>Olá {{user}}!</p>
+    <div class="header">
+    <img src="https://th.bing.com/th/id/R.7fa3cb7910152a31cb025bbacb9ca38c?rik=gsHmAXKZIDFj1g&riu=http%3a%2f%2fcampusmontanha.yolasite.com%2fresources%2f386px-Logotipo_IFET.png&ehk=Gx5SrlD%2b1OExNKJqCp70B1GzIZU9zHWYfhB9LMubK4k%3d&risl=&pid=ImgRaw&r=0" height=37px style="float: right; margin:5px;">
+    <p style="margin-left: 15px; font-size:15px">Trabalho Poo - Menu</p>
+    </div>
+    <p style="padding-top:10px;"></p>
+    <div id="error_text" style="width:auto; background-color:#ffe0e0; border:10px;">
+        <p style="text-align:center; padding:10px">Erro: Usuário Invalido</p>
+    </div>
+
+    <div id="content" class="content">
+        <p style="text-align:center; width:300px">Selecione uma das opções abaixo:</p>
+        <button onclick=redirect_articles()>Pesquisar Artigos</button>
+        <button onclick=redirect_saved()>Ver Artigos Salvos</button>
+        <button onclick=redirect_password()>Mudar Senha</button>
+        <button onclick=alert("carlos.") style="background-color: red; color: black; opacity:0.0">Deletar Conta</button>
+    </div>
+
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {loadPage();});
+
+    function loadPage(){
+        const texto = document.getElementById("error_text");
+        if({{login_error}}){
+            texto.style.opacity = "1.0";
+            setTimeout(function () {window.location.href = "/";}, 4500);
+        } else {
+            texto.style.opacity = "0.0";
+        }
+    }
+
+    function redirect_articles(){
+        window.location.href = "/search?cpf={{cpf}}";
+
+    }
+
+    function redirect_saved(){
+        window.location.href = "/saved?cpf={{cpf}}";
+    }
+
+    function redirect_password(){
+        window.location.href = "/change_password?cpf={{cpf}}";
+    }
+</script>
 </html>

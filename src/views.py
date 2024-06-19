@@ -14,7 +14,7 @@ def home():
 def forgot_password():
     email = request.args.get("email")  # confere se foi recebido um email como parametro
     # se não foi, renderiza a tela pedindo apenas o email
-    if email != None:
+    if email is not None:
         return render_template("forgot_password.html", success="false")
     # se foi, renderiza também a mensagem de sucesso, e envia o email para o usuario
 
@@ -22,19 +22,40 @@ def forgot_password():
     # enviar_email(email, gerar_senha())
     return render_template("forgot_password.html", success="true")
 
+@views.route("/register_user")
+def register():
+    return render_template("register_user.html", success="true")
 
 @views.route("/menu", methods=["GET", "POST"])
 def menu():
     form = request.form
     cpf = form.get('user')
     password = form.get('psswrdHsh')
+
+    arg = request.args
+
+    if arg.get('cpf') is not None:
+        cpf = arg.get('cpf')
+
     # botar codigo que confirma se o usuario é valido
     # se usuario não for valido, mandar para a pagina de login de novo
-    return render_template("home.html", user=cpf)
+    return render_template("home.html", cpf=cpf, login_error="false")
 
-@views.route("/register_user")
-def register():
-    return render_template("register_user.html", success="true")
+
+@views.route("/articles", methods=["GET", "POST"])
+def search_articles():
+    render_template("search_articles.html")
+
+
+@views.route("/saved", methods=["GET", "POST"])
+def saved_articles():
+    render_template("saved_articles.html")
+
+@views.route("/change_password", methods=["GET", "POST"])
+def change_password():
+    arg = request.args
+    cpf = arg.get('cpf')
+    render_template("menu.html", cpf=cpf, login_error="false")
 
 
 @views.route("/add_user", methods=["GET","POST"])
