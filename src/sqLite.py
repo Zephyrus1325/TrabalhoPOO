@@ -70,7 +70,7 @@ def esquece_senha(email):
         return erro_email_existe  # Retorna o código de erro - 6
 
 
-def buscar_email_por_cpf(cpf):
+def buscar_email_por_cpf(CPF):
     try:
         # Conectar ao banco de dados
         conn = sqlite3.connect('usuarios.db')
@@ -80,7 +80,7 @@ def buscar_email_por_cpf(cpf):
         consulta = 'SELECT email FROM clientes WHERE cpf = ?'
 
         # Executar a consulta SQL com o CPF fornecido
-        cursor.execute(consulta, (cpf,))
+        cursor.execute(consulta, (CPF,))
 
         # Obter o resultado da consulta
         resultado = cursor.fetchone()
@@ -115,12 +115,12 @@ def email_existe(email):
         conn.close()  # Fecha a conexão com o banco de dados
 
 
-def cpf_existe(cpf):
+def cpf_existe(CPF):
     conn = sqlite3.connect('usuarios.db')
     cursor = conn.cursor()
 
     try:
-        cursor.execute('SELECT 1 FROM usuarios WHERE CPF = ?', (cpf,))
+        cursor.execute('SELECT 1 FROM usuarios WHERE CPF = ?', (CPF,))
         result = cursor.fetchone()
         if result:
             return True, None  # CPF encontrado no banco de dados, sem erro
@@ -131,3 +131,18 @@ def cpf_existe(cpf):
         return False, 69  # Retorna 69 em caso de erro
     finally:
         conn.close()
+
+
+def logar(CPF, senha):
+    conn = sqlite3.connect('usuarios.db')
+    cursor = conn.cursos()
+
+    try:
+        cursor.exectute('SELECT 1 FROM usuarios WHERE CPF = ? AND senha = ?',(CPF, senha))
+        result = cursor.fetchone()
+        if result:
+            return True, None
+        else:
+            return False, None  # senha inválida -- passar o cpf_existe antes
+    except Exception:
+        return False, 89  # código de erro
