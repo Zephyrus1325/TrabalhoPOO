@@ -26,8 +26,8 @@ def enviar_email(email_usuario, nova_senha):
             # Envio do email
             smtp_server.sendmail(sender, email_usuario, msg.as_string())
         return True, 44
-    except smtplib.SMTPException as e:
+    except smtplib.SMTPException:
         return False, 97    # erro na smtplib
-    except Exception as e:
+    except Exception:
         return False, 99    # outro erro
 

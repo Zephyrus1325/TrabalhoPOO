@@ -138,7 +138,7 @@ def logar(CPF, senha):
     cursor = conn.cursos()
 
     try:
-        cursor.exectute('SELECT 1 FROM usuarios WHERE CPF = ? AND senha = ?',(CPF, senha))
+        cursor.exectute('SELECT 1 FROM usuarios WHERE CPF = ? AND senha = ?', (CPF, senha))
         result = cursor.fetchone()
         if result:
             return True, None
