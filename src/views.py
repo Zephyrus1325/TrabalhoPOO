@@ -1,3 +1,5 @@
+
+
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for
 from util import enviar_email, gerar_senha
 from sqLite import register_user
@@ -85,7 +87,13 @@ def add_user():
 
 @views.route("/json")
 def get_json():
-    return jsonify({"name": "Tim", "Coolness": 10})
+    #form = request.form
+    #search_name = form.get("search")
+    #search_size = form.get("search")
+    # TODO DELETAR ESSE DICIONARIO DE TESTE
+
+
+    return jsonify(test_dict)
 
 
 @views.route("/data")

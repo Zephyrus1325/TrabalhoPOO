@@ -113,6 +113,7 @@ popular belief, description of the electron-electron cusp is not a limiting
 factor, to within chemical accuracy, for CI calculations.</td>
                 <td>http://arxiv.org/abs/cond-mat/0102536v1</td>
             </tr>
+
         </table>
     </div>
 </body>
@@ -128,11 +129,10 @@ factor, to within chemical accuracy, for CI calculations.</td>
                 const xmlDoc = parser.
                     parseFromString(xmlString, "text/xml");
 
-                const tutorials = xmlDoc.
-                    querySelectorAll("entry");
-                tutorials.forEach((tutorial) => {
-                    console.log(tutorial.querySelector("id").textContent;);
-                });
+                var articles = xmlDoc.getElementsByTagName("Entry");
+                for(var i = 0; i < articles.lenght; i++){
+                    print(articles);
+                }
             });
 </script>
 </html>
