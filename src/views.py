@@ -22,9 +22,12 @@ def forgot_password():
     # enviar_email(email, gerar_senha())
     return render_template("forgot_password.html", success="true")
 
+
 @views.route("/register_user")
 def register():
     return render_template("register_user.html", success="true")
+
+
 
 @views.route("/menu", methods=["GET", "POST"])
 def menu():
@@ -42,20 +45,22 @@ def menu():
     return render_template("home.html", cpf=cpf, login_error="false")
 
 
-@views.route("/articles", methods=["GET", "POST"])
+@views.route("/search", methods=["GET", "POST"])
 def search_articles():
-    render_template("search_articles.html")
+    form = request.form
+    arg = request.args
+    return render_template("search_articles.html")
 
 
 @views.route("/saved", methods=["GET", "POST"])
 def saved_articles():
-    render_template("saved_articles.html")
+    return render_template("saved_articles.html")
 
 @views.route("/change_password", methods=["GET", "POST"])
 def change_password():
     arg = request.args
     cpf = arg.get('cpf')
-    render_template("menu.html", cpf=cpf, login_error="false")
+    return render_template("menu.html", cpf=cpf, login_error="false")
 
 
 @views.route("/add_user", methods=["GET","POST"])

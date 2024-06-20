@@ -1,4 +1,4 @@
-from chroma_search import pesquisa
+# from chroma_search import pesquisa
 from flask import Flask
 from views import views
 import sqLite
