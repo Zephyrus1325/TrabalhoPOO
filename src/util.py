@@ -30,4 +30,3 @@ def enviar_email(email_usuario, nova_senha):
         return False, 97    # erro na smtplib
     except Exception:
         return False, 99    # outro erro
-

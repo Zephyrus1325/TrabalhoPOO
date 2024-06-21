@@ -58,6 +58,7 @@ def esquece_senha(email):
             '''
             nova_senha = gerar_senha()  # Gera uma nova senha
             cursor.execute(atualizar_senha, (nova_senha, email))  # Atualiza a pswd no db
+            conn.commit
             enviar_email(email, nova_senha)  # Envia nova senha para o e-mail
             return True, 0  # Operação bem-sucedida
         except Exception:
@@ -146,7 +147,7 @@ def logar(CPF, senha):
             return False, None  # senha inválida -- passar o cpf_existe antes
     except Exception:
         return False, 89  # código de erro
-    
+
 
 def registra_artigo(artigo):
     # Conecta ao banco de dados SQLite (ou cria se ele não existir)
