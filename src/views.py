@@ -1,8 +1,9 @@
-
+import json
 
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for
 from util import enviar_email, gerar_senha
-from sqLite import register_user
+from sqLite import register_user, logar
+import arxiv_seach
 views = Blueprint(__name__, "views")
 
 
@@ -33,25 +34,39 @@ def register():
 
 @views.route("/menu", methods=["GET", "POST"])
 def menu():
-    form = request.form
-    cpf = form.get('user')
-    password = form.get('psswrdHsh')
 
-    arg = request.args
 
-    if arg.get('cpf') is not None:
-        cpf = arg.get('cpf')
+
+
+    if request.method == "GET":
+        arg = request.args
+        cpf = arg.get("cpf")
+        error = "false"
+    elif request.method == "POST":
+        form = request.form
+        cpf = form.get('user')
+        password = form.get('psswrdHsh')
+        status = logar(cpf, password)
+        error = "false"
+        if status[0]:
+            return render_template("home.html", cpf=cpf, login_error="false")
+        return render_template("home.html", cpf=cpf, login_error="true")
+    return render_template("home.html", cpf=cpf, login_error="false")
 
     # botar codigo que confirma se o usuario é valido
     # se usuario não for valido, mandar para a pagina de login de novo
-    return render_template("home.html", cpf=cpf, login_error="false")
 
 
-@views.route("/search", methods=["GET", "POST"])
+
+@views.route("/search", methods=["GET"])
 def search_articles():
-    form = request.form
-    arg = request.args
-    return render_template("search_articles.html")
+    if request.method == "GET":
+        arg = request.args
+        query = arg.get("search")
+        search_total = arg.get("total_search")
+        if query is not None and search_total is not None:
+            return render_template("search_articles.html", query=query, total=search_total)
+    return render_template("search_articles.html", query="", total=0)
 
 
 @views.route("/saved", methods=["GET", "POST"])
@@ -85,15 +100,18 @@ def add_user():
     # return redirect(url_for("views.home"))
 
 
-@views.route("/json")
+@views.route("/json", methods=["GET"])
 def get_json():
-    #form = request.form
-    #search_name = form.get("search")
-    #search_size = form.get("search")
-    # TODO DELETAR ESSE DICIONARIO DE TESTE
+    args = request.args
+    search_query = args.get("search")
+    search_size = int(args.get("total"))
+    # Realizar a pesquisa e salvar numa lista nova
+    artigos = arxiv_seach.search(search_query, search_size, "12345667764")
+    lista = list()
+    for artigo in artigos:
+        json.dumps(lista.append(artigo.dict()))
 
-
-    return jsonify(test_dict)
+    return lista
 
 
 @views.route("/data")

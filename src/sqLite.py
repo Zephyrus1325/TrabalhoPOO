@@ -135,10 +135,10 @@ def cpf_existe(CPF):
 
 def logar(CPF, senha):
     conn = sqlite3.connect('usuarios.db')
-    cursor = conn.cursos()
+    cursor = conn.cursor()
 
     try:
-        cursor.exectute('SELECT 1 FROM usuarios WHERE CPF = ? AND senha = ?', (CPF, senha))
+        cursor.execute('SELECT 1 FROM usuarios WHERE CPF = ? AND senha = ?', (CPF, senha))
         result = cursor.fetchone()
         if result:
             return True, None

@@ -87,32 +87,6 @@ tr:hover {background-color: #D6EEEE;}
     </div>
     <div>
         <table id="table">
-            <tr>
-                <th>Identificador</th>
-                <th>Titulo</th>
-                <th>Resumo</th>
-                <th>Link</th>
-            </tr>
-            <tr>
-                <td>http://arxiv.org/abs/cond-mat/0102536v1</td>
-                <td style="text-align:justify">Impact of Electron-Electron Cusp on Configuration Interaction Energies</td>
-                <td style="text-align:justify;">The effect of the electron-electron cusp on the convergence of configuration
-interaction (CI) wave functions is examined. By analogy with the
-pseudopotential approach for electron-ion interactions, an effective
-electron-electron interaction is developed which closely reproduces the
-scattering of the Coulomb interaction but is smooth and finite at zero
-electron-electron separation. The exact many-electron wave function for this
-smooth effective interaction has no cusp at zero electron-electron separation.
-We perform CI and quantum Monte Carlo calculations for He and Be atoms, both
-with the Coulomb electron-electron interaction and with the smooth effective
-electron-electron interaction. We find that convergence of the CI expansion of
-the wave function for the smooth electron-electron interaction is not
-significantly improved compared with that for the divergent Coulomb interaction
-for energy differences on the order of 1 mHartree. This shows that, contrary to
-popular belief, description of the electron-electron cusp is not a limiting
-factor, to within chemical accuracy, for CI calculations.</td>
-                <td>http://arxiv.org/abs/cond-mat/0102536v1</td>
-            </tr>
 
         </table>
     </div>
@@ -121,18 +95,14 @@ factor, to within chemical accuracy, for CI calculations.</td>
 <script>
     //DELETAR ISSO MAIS TARDE
     // Durante carregamente de pagina, pegar um JSON transformar numa table com tamanho dinamico
+    $.getJSON( "/json?search={{query}}&total={{total}}", function( data ) {
+        table = document.getElementById("table");
+        for(var i = 0; i < data.length; i++){
+            var newRow = table.insertRow();
+            newRow.innerHTML = "<td>"+data[i].id+"</td><td>"+data[i].title+"</td><td>"+data[i].summary+"</td><td>"+data[i].link+"</td>"
+            console.log(data[i]);
+        }
+    });
 
-    fetch("https://export.arxiv.org/api/query?search_query=all:electron")
-            .then((response) => response.text())
-            .then((xmlString) => {
-                const parser = new DOMParser();
-                const xmlDoc = parser.
-                    parseFromString(xmlString, "text/xml");
-
-                var articles = xmlDoc.getElementsByTagName("Entry");
-                for(var i = 0; i < articles.lenght; i++){
-                    print(articles);
-                }
-            });
 </script>
 </html>

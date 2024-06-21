@@ -16,3 +16,6 @@ class Artigo:
 
     def print(self):
         print(self.identifier, self.title, self.resume, self.link)
+
+    def dict(self):
+        return {"id": self.identifier, "title": self.title, "summary": self.resume, "link": self.link}

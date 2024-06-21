@@ -1,21 +1,24 @@
 import arxiv
 from artigo import Artigo
 
-def search(query):
+
+# pesquisa os artigos pelo arxiv, e retorna uma lista com os artigos de resultado
+def search(query, total_results, user_cpf):
     # Construct the default API client.
     client = arxiv.Client()
 
-    # Search for the 10 most recent articles matching the keyword "quantum."
+    # Faz a pesquisa de acordo com o query e retorna os resultados de acordo com a relevancia
     search = arxiv.Search(
-        query="quantum",
-        max_results=10,
+        query=query,
+        max_results=total_results,
         sort_by=arxiv.SortCriterion.Relevance
     )
 
     results = client.results(search)
 
+    # gerar lista de resultados
     list_out = list()
-    # `results` is a generator; you can iterate over its elements one by one...
     for r in client.results(search):
-        artigo = Artigo(r.entry_id, r.title, r.summary, r.pdf_url, "0", query)
+        artigo = Artigo(r.entry_id, r.title, r.summary, r.pdf_url, user_cpf, query)
         list_out.append(artigo)
+    return list_out

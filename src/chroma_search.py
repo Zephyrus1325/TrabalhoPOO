@@ -9,7 +9,6 @@ def pesquisa(keyword, quantidade):
 
     # Mapear IDs para Docs
     database = {
-        "Laser Cut": ({"Nome": "Artigo sobre corte a laser"}, {"Conteudo": "Corte a laser e uma tecnica para producao de artigos e coisas assim, seria interessante aprender a mexer com isso direito e coisa e tal"}),
         "Assembly": "This is a document about assembly",
         "Python": "This is a document about python",
         "Java": "This is a document about java"
