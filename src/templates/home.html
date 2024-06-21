@@ -72,16 +72,21 @@
     }
 
     function redirect_articles(){
-        window.location.href = "/search?cpf={{cpf}}";
-
+        if(!{{login_error}}){
+            window.location.href = "/search?cpf={{cpf}}";
+        }
     }
 
     function redirect_saved(){
-        window.location.href = "/saved?cpf={{cpf}}";
+        if(!{{login_error}}){
+            window.location.href = "/saved?cpf={{cpf}}";
+        }
     }
 
     function redirect_password(){
-        window.location.href = "/change_password?cpf={{cpf}}";
+        if(!{{login_error}}){
+            window.location.href = "/change_password?cpf={{cpf}}";
+        }
     }
 </script>
 </html>

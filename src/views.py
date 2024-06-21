@@ -1,8 +1,7 @@
 import json
 
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for
-from util import enviar_email, gerar_senha
-from sqLite import register_user, logar
+from sqLite import register_user, logar, esquece_senha, registra_artigo
 import arxiv_seach
 views = Blueprint(__name__, "views")
 
@@ -18,11 +17,9 @@ def forgot_password():
     email = request.args.get("email")  # confere se foi recebido um email como parametro
     # se não foi, renderiza a tela pedindo apenas o email
     if email is not None:
+        esquece_senha(email)
         return render_template("forgot_password.html", success="false")
     # se foi, renderiza também a mensagem de sucesso, e envia o email para o usuario
-
-    # todo remover isso aqui antes de dar deploy
-    # enviar_email(email, gerar_senha())
     return render_template("forgot_password.html", success="true")
 
 
@@ -34,24 +31,26 @@ def register():
 
 @views.route("/menu", methods=["GET", "POST"])
 def menu():
-
-
-
-
     if request.method == "GET":
         arg = request.args
         cpf = arg.get("cpf")
         error = "false"
+        if cpf is None:
+            # se não tiver o cpf no link, jogar como erro
+            error = "true"
+
     elif request.method == "POST":
         form = request.form
         cpf = form.get('user')
         password = form.get('psswrdHsh')
+        print(cpf,password)
         status = logar(cpf, password)
+        print(status)
         error = "false"
         if status[0]:
             return render_template("home.html", cpf=cpf, login_error="false")
         return render_template("home.html", cpf=cpf, login_error="true")
-    return render_template("home.html", cpf=cpf, login_error="false")
+    return render_template("home.html", cpf=cpf, login_error=error)
 
     # botar codigo que confirma se o usuario é valido
     # se usuario não for valido, mandar para a pagina de login de novo
@@ -60,13 +59,15 @@ def menu():
 
 @views.route("/search", methods=["GET"])
 def search_articles():
+    cpf = ""
     if request.method == "GET":
         arg = request.args
         query = arg.get("search")
         search_total = arg.get("total_search")
+        cpf = arg.get("cpf")
         if query is not None and search_total is not None:
-            return render_template("search_articles.html", query=query, total=search_total)
-    return render_template("search_articles.html", query="", total=0)
+            return render_template("search_articles.html", cpf=cpf, query=query, total=search_total)
+    return render_template("search_articles.html", cpf=cpf, query="", total=0)
 
 
 @views.route("/saved", methods=["GET", "POST"])
@@ -110,6 +111,7 @@ def get_json():
     lista = list()
     for artigo in artigos:
         json.dumps(lista.append(artigo.dict()))
+        registra_artigo(artigo)
 
     return lista
 

@@ -58,7 +58,7 @@ def esquece_senha(email):
             '''
             nova_senha = gerar_senha()  # Gera uma nova senha
             cursor.execute(atualizar_senha, (nova_senha, email))  # Atualiza a pswd no db
-            conn.commit
+            conn.commit()
             enviar_email(email, nova_senha)  # Envia nova senha para o e-mail
             return True, 0  # Operação bem-sucedida
         except Exception:

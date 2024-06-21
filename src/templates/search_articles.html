@@ -75,15 +75,16 @@ tr:hover {background-color: #D6EEEE;}
     </div>
     <div class="search_section" style="margin: 20px;">
         <form>
+            <input type="hidden" id="cpf" name="cpf" value="{{cpf}}" >
             <label for="search_articles">Pesquisar Artigos</label>
-            <input type="search" id="search_articles" name="search">
+            <input type="search" id="search_articles" name="search" required>
             <label for="total_articles">Numero de artigos</label>
-            <input type="number" id="total_articles" name="total_search" style="width:70px">
+            <input type="number" id="total_articles" name="total_search" pattern="[0-9]{1,3}" min="0" style="width:70px" required>
             <button type="submit">Pesquisar Artigos</button>
         </form>
     </div>
     <div style="background-color: #efefef;">
-        <p style="padding: 10px 50px">Resultado: 10 Artigos pesquisados, 10 Encontrados</p>
+        <p style="padding: 10px 50px">Resultado: {{total}} Artigos pesquisados</p>
     </div>
     <div>
         <table id="table">
@@ -94,7 +95,7 @@ tr:hover {background-color: #D6EEEE;}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
     //DELETAR ISSO MAIS TARDE
-    // Durante carregamente de pagina, pegar um JSON transformar numa table com tamanho dinamico
+    // Durante carregamento de pagina, pegar um JSON transformar numa table com tamanho dinamico
     $.getJSON( "/json?search={{query}}&total={{total}}", function( data ) {
         table = document.getElementById("table");
         for(var i = 0; i < data.length; i++){
