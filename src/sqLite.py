@@ -146,3 +146,39 @@ def logar(CPF, senha):
             return False, None  # senha inválida -- passar o cpf_existe antes
     except Exception:
         return False, 89  # código de erro
+    
+
+def registra_artigo(artigo):
+    # Conecta ao banco de dados SQLite (ou cria se ele não existir)
+    conn = sqlite3.connect('artigos.db')  # fazer tudo no mesmo arquivo? docs e usuarios?
+    cursor = conn.cursor()
+
+    # Cria a tabela 'usuarios' se ela não existir
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS artigos (
+        id TEXT NOT NULL PRIMARY KEY,
+        titulo TEXT NOT NULL,
+        resumo TEXT NOT NULL,
+        link TEXT NOT NULL,
+        cpf_do_dono TEXT NOT NULL,
+        string_pesquisada TEXT NOT NULL,
+    )
+    ''')
+
+    try:
+        # Insere os dados do usuário na tabela 'usuarios'
+        cursor.execute('''
+        INSERT INTO artigos (id, titulo, resumo, link, cpf_do_dono, string_pesquisada)
+        VALUES (?, ?, ?, ?, ?, ?)
+        ''', (artigo.id, artigo.titulo, artigo.resumo, artigo.link, artigo.cpf_do_dono, artigo.string_pesquisada))
+        # Confirma a transação
+        conn.commit()
+        return True, None  # Sucesso, sem erro
+    except sqlite3.IntegrityError:
+        return False, 32  # Erro: id já cadastrado ou outro erro de integridade
+    except Exception:
+        return False, 12  # Outro erro
+    finally:
+        # Fecha a conexão
+        conn.close()
+        
