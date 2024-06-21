@@ -156,21 +156,21 @@ def registra_artigo(artigo):
     # Cria a tabela 'usuarios' se ela não existir
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS artigos (
-        id TEXT NOT NULL PRIMARY KEY,
-        titulo TEXT NOT NULL,
-        resumo TEXT NOT NULL,
+        identifier TEXT NOT NULL PRIMARY KEY,
+        title TEXT NOT NULL,
+        summary  TEXT NOT NULL,
         link TEXT NOT NULL,
-        cpf_do_dono TEXT NOT NULL,
-        string_pesquisada TEXT NOT NULL,
+        cpf_user TEXT NOT NULL,
+        search_query TEXT NOT NULL,
     )
     ''')
 
     try:
         # Insere os dados do usuário na tabela 'usuarios'
         cursor.execute('''
-        INSERT INTO artigos (id, titulo, resumo, link, cpf_do_dono, string_pesquisada)
+        INSERT INTO artigos (identifier, title, summary, link, cpf_usar, search_query)
         VALUES (?, ?, ?, ?, ?, ?)
-        ''', (artigo.id, artigo.titulo, artigo.resumo, artigo.link, artigo.cpf_do_dono, artigo.string_pesquisada))
+        ''', (artigo.identifier, artigo.title, artigo.summary, artigo.link, artigo.cpf_user, artigo.search_query))
         # Confirma a transação
         conn.commit()
         return True, None  # Sucesso, sem erro
@@ -181,4 +181,3 @@ def registra_artigo(artigo):
     finally:
         # Fecha a conexão
         conn.close()
-        
