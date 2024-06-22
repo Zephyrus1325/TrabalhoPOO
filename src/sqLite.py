@@ -182,3 +182,28 @@ def registra_artigo(artigo):
     finally:
         # Fecha a conexão
         conn.close()
+
+
+def trocar_senha(CPF, senha, nova_senha):
+    # Conecta ao banco de dados
+    conn = sqlite3.connect('usuarios.db')
+    cursor = conn.cursor()
+
+    try:
+
+        atualizar_senha = '''
+        UPDATE usuarios
+        SET senha = ?
+        WHERE CPF = ? AND senha = ?
+        '''
+
+        cursor.execute(atualizar_senha, (nova_senha, CPF, senha))  # Atualiza a pswd no db
+        conn.commit()
+
+        return True, 70  # Operação bem-sucedida
+    except Exception:
+        return False, 33  # Código de erro
+    finally:
+        # Fecha a conexão com o banco de dados
+        cursor.close()
+        conn.close()
