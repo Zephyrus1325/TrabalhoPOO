@@ -54,7 +54,7 @@
         <button onclick=redirect_articles()>Pesquisar Artigos</button>
         <button onclick=redirect_saved()>Ver Artigos Salvos</button>
         <button onclick=redirect_password()>Mudar Senha</button>
-        <button onclick=alert("carlos.") style="background-color: red; color: black; opacity:0.0">Deletar Conta</button>
+        <button onclick=redirect_logoff() style="background-color: red; color: black;">Fazer Logoff</button>
     </div>
 
 </body>
@@ -63,7 +63,7 @@
 
     function loadPage(){
         const texto = document.getElementById("error_text");
-        if({{login_error}}){
+        if({{login_error}} || "{{cpf}}" == ""){
             texto.style.opacity = "1.0";
             setTimeout(function () {window.location.href = "/";}, 4500);
         } else {
@@ -86,6 +86,12 @@
     function redirect_password(){
         if(!{{login_error}}){
             window.location.href = "/change_password?cpf={{cpf}}";
+        }
+    }
+
+    function redirect_logoff(){
+        if(!{{login_error}}){
+            window.location.href = "/";
         }
     }
 </script>

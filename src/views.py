@@ -1,8 +1,8 @@
 import json
 
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for
-from sqLite import register_user, logar, esquece_senha, registra_artigo
-import arxiv_seach
+from sqLite import register_user, logar, esquece_senha, registra_artigo, trocar_senha, procura_artigos
+import arxiv_search
 views = Blueprint(__name__, "views")
 
 
@@ -43,9 +43,7 @@ def menu():
         form = request.form
         cpf = form.get('user')
         password = form.get('psswrdHsh')
-        print(cpf,password)
         status = logar(cpf, password)
-        print(status)
         error = "false"
         if status[0]:
             return render_template("home.html", cpf=cpf, login_error="false")
@@ -72,19 +70,41 @@ def search_articles():
 
 @views.route("/saved", methods=["GET", "POST"])
 def saved_articles():
-    return render_template("saved_articles.html")
+    cpf=""
+    if request.method == "GET":
+        arg = request.args
+        query = arg.get("search")
+        search_total = arg.get("total_search")
+        cpf = arg.get("cpf")
+        return render_template("saved_articles.html", cpf=cpf, query=query, total=search_total)
+    return render_template("saved_articles.html", cpf=cpf, query="", total=0)
 
 @views.route("/change_password", methods=["GET", "POST"])
 def change_password():
-    arg = request.args
-    cpf = arg.get('cpf')
-    return render_template("menu.html", cpf=cpf, login_error="false")
+
+    if request.method == "POST":
+        form = request.form
+        cpf = form.get('cpf')
+        senha_antiga = form.get("old_password")
+        senha_nova = form.get("new_password")
+        codigo = trocar_senha(cpf, senha_antiga, senha_nova)
+        return render_template("change_password.html", cpf=cpf, code=codigo[1])
+    elif request.method == "GET":
+        arg = request.args
+        cpf = arg.get('cpf')
+        return render_template("change_password.html", cpf=cpf, code=0)
+    else:
+        # deveria jogar um erro, porque tem que receber pelo menos um get com o CPF
+        "do nothing, for now"
+        # TODO Adicionar um jeito de corrigir esse problema
+        # Meu deus, programar um projeto grande só vai acumulando problema atras de problema, aff
+    cpf = ""
+    return render_template("change_password.html", cpf=cpf, code=30)
 
 
 @views.route("/add_user", methods=["GET","POST"])
 def add_user():
     form = request.form
-
     username = form.get("username")
     age = form.get("age")
     cpf = form.get("cpf")
@@ -104,17 +124,26 @@ def add_user():
 @views.route("/json", methods=["GET"])
 def get_json():
     args = request.args
+    cpf = args.get("cpf")
     search_query = args.get("search")
     search_size = int(args.get("total"))
     # Realizar a pesquisa e salvar numa lista nova
-    artigos = arxiv_seach.search(search_query, search_size, "12345667764")
+    artigos = arxiv_search.search(search_query, search_size, cpf)
     lista = list()
     for artigo in artigos:
-        json.dumps(lista.append(artigo.dict()))
+        #json.dumps(lista.append(artigo.dict()))
+        lista.append(artigo.dict())
         registra_artigo(artigo)
-
     return lista
 
+@views.route("/get_articles", methods=["GET"])
+def get_articles():
+    cpf = request.args.get("cpf")
+    artigos = procura_artigos(cpf)[0]
+    output = list()
+    for artigo in artigos:
+        json.dumps(output.append(artigo.dict_full()))
+    return output
 
 @views.route("/data")
 def get_data():

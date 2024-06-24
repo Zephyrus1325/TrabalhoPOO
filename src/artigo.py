@@ -19,3 +19,6 @@ class Artigo:
 
     def dict(self):
         return {"id": self.identifier, "title": self.title, "summary": self.summary, "link": self.link}
+
+    def dict_full(self):
+        return {"id": self.identifier, "title": self.title, "summary": self.summary, "link": self.link, "cpf_user": self.cpf_user, "query": self.search_query}

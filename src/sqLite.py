@@ -1,9 +1,9 @@
 import sqlite3
-
+from artigo import Artigo
 
 def register_user(nome, idade, CPF, email, CEP, senha):
     # Conecta ao banco de dados SQLite (ou cria se ele não existir)
-    conn = sqlite3.connect('usuarios.db')
+    conn = sqlite3.connect('banco_dados.db')
     cursor = conn.cursor()
 
     # Cria a tabela 'usuarios' se ela não existir
@@ -46,7 +46,7 @@ def esquece_senha(email):
 
     if sim:
         # Conecta ao banco de dados
-        conn = sqlite3.connect('usuarios.db')
+        conn = sqlite3.connect('banco_dados.db')
         cursor = conn.cursor()
 
         try:
@@ -74,7 +74,7 @@ def esquece_senha(email):
 def buscar_email_por_cpf(CPF):
     try:
         # Conectar ao banco de dados
-        conn = sqlite3.connect('usuarios.db')
+        conn = sqlite3.connect('banco_dados.db')
         cursor = conn.cursor()
 
         # Consulta SQL para buscar o e-mail pelo CPF
@@ -100,7 +100,7 @@ def buscar_email_por_cpf(CPF):
 
 
 def email_existe(email):
-    conn = sqlite3.connect('usuarios.db')
+    conn = sqlite3.connect('banco_dados.db')
     cursor = conn.cursor()
 
     try:
@@ -117,7 +117,7 @@ def email_existe(email):
 
 
 def cpf_existe(CPF):
-    conn = sqlite3.connect('usuarios.db')
+    conn = sqlite3.connect('banco_dados.db')
     cursor = conn.cursor()
 
     try:
@@ -135,7 +135,7 @@ def cpf_existe(CPF):
 
 
 def logar(CPF, senha):
-    conn = sqlite3.connect('usuarios.db')
+    conn = sqlite3.connect('banco_dados.db')
     cursor = conn.cursor()
 
     try:
@@ -151,25 +151,25 @@ def logar(CPF, senha):
 
 def registra_artigo(artigo):
     # Conecta ao banco de dados SQLite (ou cria se ele não existir)
-    conn = sqlite3.connect('artigos.db')  # fazer tudo no mesmo arquivo? docs e usuarios?
+    conn = sqlite3.connect('banco_dados.db')  # fazer tudo no mesmo arquivo? docs e usuarios?
     cursor = conn.cursor()
-
-    # Cria a tabela 'usuarios' se ela não existir
+    # Cria a tabela 'artigos' se ela não existir
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS artigos (
-        identifier TEXT NOT NULL PRIMARY KEY,
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        identifier TEXT NOT NULL,
         title TEXT NOT NULL,
-        summary  TEXT NOT NULL,
+        summary TEXT NOT NULL,
         link TEXT NOT NULL,
         cpf_user TEXT NOT NULL,
-        search_query TEXT NOT NULL,
-    )
+        search_query TEXT NOT NULL
+        )
     ''')
 
     try:
-        # Insere os dados do usuário na tabela 'usuarios'
+        # Insere os dados do artigo na tabela 'artigos'
         cursor.execute('''
-        INSERT INTO artigos (identifier, title, summary, link, cpf_usar, search_query)
+        INSERT INTO artigos (identifier, title, summary, link, cpf_user, search_query)
         VALUES (?, ?, ?, ?, ?, ?)
         ''', (artigo.identifier, artigo.title, artigo.summary, artigo.link, artigo.cpf_user, artigo.search_query))
         # Confirma a transação
@@ -184,9 +184,32 @@ def registra_artigo(artigo):
         conn.close()
 
 
+def procura_artigos(cpf):
+    conn = sqlite3.connect('banco_dados.db')
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute('SELECT * FROM artigos WHERE cpf_user = ?', (cpf,))
+        result = cursor.fetchall()
+        artigos = list()
+        for linha in result:
+            artigo = Artigo(linha[1], linha[2], linha[3], linha[4], linha[5], linha[6])
+            artigos.append(artigo)
+        if artigos is not None:
+            return artigos, None
+        else:
+            return False, None
+    except sqlite3.Error as erro:
+        print(erro)
+        return False, 89  # código de erro
+
+
+
+
+
 def trocar_senha(CPF, senha, nova_senha):
     # Conecta ao banco de dados
-    conn = sqlite3.connect('usuarios.db')
+    conn = sqlite3.connect('banco_dados.db')
     cursor = conn.cursor()
 
     try:
@@ -198,6 +221,30 @@ def trocar_senha(CPF, senha, nova_senha):
         '''
 
         cursor.execute(atualizar_senha, (nova_senha, CPF, senha))  # Atualiza a pswd no db
+        conn.commit()
+
+        return True, 70  # Operação bem-sucedida
+    except Exception:
+        return False, 33  # Código de erro
+    finally:
+        # Fecha a conexão com o banco de dados
+        cursor.close()
+        conn.close()
+
+# ALERTA: CUIDADO AO CHAMAR ESSA FUNÇÃO, USAR APENAS EM AMBIENTE DE TESTES!
+# TODO DELETAR ESSA FUNÇÃO ANTES DE ENTREGAR
+def deleta_artigos():
+    # Conecta ao banco de dados
+    conn = sqlite3.connect('banco_dados.db')
+    cursor = conn.cursor()
+
+    try:
+
+        deletar_artigos = '''
+            DROP TABLE IF EXISTS artigos
+            '''
+
+        cursor.execute(deletar_artigos)  # deleta a tabela de artigos
         conn.commit()
 
         return True, 70  # Operação bem-sucedida

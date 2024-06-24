@@ -183,28 +183,29 @@ span.psw {
         $.getJSON(link, function(data) {
             if(data != null){
                 if(data.logradouro == undefined){
-                    document.getElementById('rua').disabled=false;
+                    document.getElementById('rua').readOnly=false;
                     document.getElementById('rua').value="";
                 } else {
                     document.getElementById('rua').value=data.logradouro;
-                    document.getElementById('rua').disabled=true;
+                    document.getElementById('rua').readOnly=true;
                 }
 
                 if(data.localidade == undefined){
-                    document.getElementById('cidade').disabled=false;
+                    document.getElementById('cidade').readOnly=false;
                     document.getElementById('cidade').value="";
                 } else {
                     document.getElementById('cidade').value=data.localidade;
-                    document.getElementById('cidade').disabled=true;
+                    document.getElementById('cidade').readOnly=true;
                 }
 
                 if(data.uf == undefined){
-                    document.getElementById('estado').disabled=false;
+                    document.getElementById('estado').readOnly=false;
                     document.getElementById('estado').value="";
                 } else {
                     document.getElementById('estado').value=data.uf;
-                    document.getElementById('estado').disabled=true;
+                    document.getElementById('estado').readOnly=true;
                 }
+                console.log(data.uf);
             }
         });
     }

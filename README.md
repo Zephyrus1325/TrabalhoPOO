@@ -4,3 +4,4 @@ Dependencias no projeto:
 - flask
 - pysqlite
 - chromadb
+- arxiv

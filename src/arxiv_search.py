@@ -21,4 +21,5 @@ def search(query, total_results, user_cpf):
     for r in client.results(search):
         artigo = Artigo(r.entry_id, r.title, r.summary, r.pdf_url, user_cpf, query)
         list_out.append(artigo)
-    return list_out
+    return tuple(list_out)
+

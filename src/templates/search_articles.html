@@ -82,13 +82,20 @@ tr:hover {background-color: #D6EEEE;}
             <input type="number" id="total_articles" name="total_search" pattern="[0-9]{1,3}" min="0" style="width:70px" required>
             <button type="submit">Pesquisar Artigos</button>
         </form>
+        <button onclick="location.href = '/menu?cpf={{cpf}}';" style="float: right; height: 40px; margin-top: 20px;">Retornar ao menu</button>
+
     </div>
     <div style="background-color: #efefef;">
         <p style="padding: 10px 50px">Resultado: {{total}} Artigos pesquisados</p>
     </div>
     <div>
         <table id="table">
-
+            <tr>
+                <th>Identificador</th>
+                <th>Titulo</th>
+                <th>Resumo</th>
+                <th>Link</th>
+            </tr>
         </table>
     </div>
 </body>
@@ -96,12 +103,12 @@ tr:hover {background-color: #D6EEEE;}
 <script>
     //DELETAR ISSO MAIS TARDE
     // Durante carregamento de pagina, pegar um JSON transformar numa table com tamanho dinamico
-    $.getJSON( "/json?search={{query}}&total={{total}}", function( data ) {
+    $.getJSON( "/json?cpf={{cpf}}&search={{query}}&total={{total}}", function( data ) {
         table = document.getElementById("table");
         for(var i = 0; i < data.length; i++){
             var newRow = table.insertRow();
             newRow.innerHTML = "<td>"+data[i].id+"</td><td>"+data[i].title+"</td><td>"+data[i].summary+"</td><td>"+data[i].link+"</td>"
-            console.log(data[i]);
+            //console.log(data[i]);
         }
     });
 

@@ -75,20 +75,29 @@ tr:hover {background-color: #D6EEEE;}
     </div>
     <div class="search_section" style="margin: 20px;">
         <form>
+            <input type="hidden" id="cpf" name="cpf" value="{{cpf}}" >
             <label for="search_articles">Pesquisar Artigos</label>
-            <input type="search" id="search_articles" name="search">
+            <input type="search" id="search_articles" name="search" required>
             <label for="total_articles">Numero de artigos</label>
-            <input type="number" id="total_articles" name="total_search" style="width:70px">
+            <input type="number" id="total_articles" name="total_search" style="width:70px" required>
             <button type="submit">Pesquisar Artigos</button>
-            <button>Salvar como CSV</button>
+            <button type="button">Salvar como CSV</button>
         </form>
+        <button onclick="location.href = '/menu?cpf={{cpf}}';" style="float: right; height: 40px; margin-top: 20px;">Retornar ao menu</button>
+
     </div>
     <div style="background-color: #efefef;">
-        <p style="padding: 10px 50px">Resultado: 10 Artigos pesquisados, 10 Encontrados</p>
+        <p style="padding: 10px 50px">Resultado: {{total}} Artigos pesquisados</p>
     </div>
     <div>
         <table id="table">
-
+            <tr>
+                <th>Identificador</th>
+                <th>Titulo</th>
+                <th>Resumo</th>
+                <th>Link</th>
+                <th>Chave Pesquisada</th>
+            </tr>
         </table>
     </div>
 </body>
@@ -96,11 +105,11 @@ tr:hover {background-color: #D6EEEE;}
 <script>
     //DELETAR ISSO MAIS TARDE
     // Durante carregamente de pagina, pegar um JSON transformar numa table com tamanho dinamico
-    $.getJSON( "/json?search={{query}}&total={{total}}", function( data ) {
+    $.getJSON( "/get_articles?cpf={{cpf}}&search={{query}}&total={{total}}", function( data ) {
         table = document.getElementById("table");
         for(var i = 0; i < data.length; i++){
             var newRow = table.insertRow();
-            newRow.innerHTML = "<td>"+data[i].id+"</td><td>"+data[i].title+"</td><td>"+data[i].summary+"</td><td>"+data[i].link+"</td>"
+            newRow.innerHTML = "<td>"+data[i].id+"</td><td>"+data[i].title+"</td><td>"+data[i].summary+"</td><td>"+data[i].link+"</td><td>"+data[i].query+"</td>"
             console.log(data[i]);
         }
     });
