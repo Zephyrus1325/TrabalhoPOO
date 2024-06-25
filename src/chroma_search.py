@@ -1,5 +1,7 @@
 import chromadb
+from arxiv_search import search
 from artigo import Artigo
+from sqLite import registra_artigo, procura_artigo
 
 #Criar ou adicionar um novo banco de dados
 def adicionar_artigo (artigo):
@@ -19,6 +21,7 @@ def adicionar_artigo (artigo):
         ids=[artigo.identifier] #ID da colecao
     )
 
+
 #Pegar o banco de dados e fazer uma pesquisa nele
 def pesquisa(keyword, quantidade, cpf_user):
 
@@ -34,11 +37,25 @@ def pesquisa(keyword, quantidade, cpf_user):
     results.pop('documents')    # Remover os conteudos
     results.pop('embeddings')   # que não retornam
     results.pop('uris')         # valores (None)
-    results.pop('data')         #
+    results.pop('data')         
 
-    # Criar lista de IDs
-    lista_id = []
-    
-    for id in range(len(results['ids'][0])):
-        lista_id.append (results['ids'] [id])
-    return lista_id
+    print(results['ids'][0])
+    return results['ids'][0] #Retorna os IDs
+
+
+#Pega a lista de artigos do arxiv e coloca na database do chrmadb
+def pesquisar_artigos (keyword, quantidade, cpf_user):
+
+    lista_artigos = search(keyword, quantidade, cpf_user)
+
+    for art in lista_artigos:
+        adicionar_artigo(art)
+        registra_artigo(art)
+
+    lista_id = pesquisa(keyword, quantidade, cpf_user)
+
+    lista_results = []
+    for id in lista_id:
+        lista_results.append(procura_artigo(id, cpf_user)[0])
+
+    return lista_results

@@ -162,7 +162,8 @@ def registra_artigo(artigo):
         summary TEXT NOT NULL,
         link TEXT NOT NULL,
         cpf_user TEXT NOT NULL,
-        search_query TEXT NOT NULL
+        search_query TEXT NOT NULL,
+        UNIQUE (identifier, title, summary, link, cpf_user, search_query)
         )
     ''')
 
@@ -203,7 +204,23 @@ def procura_artigos(cpf):
         print(erro)
         return False, 89  # código de erro
 
+def procura_artigo(id, cpf):
+    conn = sqlite3.connect('banco_dados.db')
+    cursor = conn.cursor()
 
+    try:
+        cursor.execute('SELECT * FROM artigos WHERE cpf_user = ? AND identifier = ?', (cpf,id))
+        linha = cursor.fetchone()
+        artigos = list()
+        artigo = Artigo(linha[1], linha[2], linha[3], linha[4], linha[5], linha[6])
+        artigos.append(artigo)
+        if artigos is not None:
+            return artigos, None
+        else:
+            return False, None
+    except sqlite3.Error as erro:
+        print(erro)
+        return False, 89  # código de erro
 
 
 
