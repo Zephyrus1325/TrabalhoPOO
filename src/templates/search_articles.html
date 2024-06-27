@@ -71,7 +71,7 @@ tr:hover {background-color: #D6EEEE;}
 <body>
     <div class="header">
         <img src="https://th.bing.com/th/id/R.7fa3cb7910152a31cb025bbacb9ca38c?rik=gsHmAXKZIDFj1g&riu=http%3a%2f%2fcampusmontanha.yolasite.com%2fresources%2f386px-Logotipo_IFET.png&ehk=Gx5SrlD%2b1OExNKJqCp70B1GzIZU9zHWYfhB9LMubK4k%3d&risl=&pid=ImgRaw&r=0" height=37px style="float: right; margin:5px;">
-        <p style="margin-left: 15px; font-size:15px">Trabalho Poo - Pesquisar Artigos</p>
+        <p style="margin-left: 15px; font-size:15px">Trabalho POO - Pesquisar Artigos</p>
     </div>
     <div class="search_section" style="margin: 20px;">
         <form>
@@ -86,7 +86,7 @@ tr:hover {background-color: #D6EEEE;}
 
     </div>
     <div style="background-color: #efefef;">
-        <p style="padding: 10px 50px">Resultado: {{total}} Artigos pesquisados</p>
+        <p style="padding: 10px 50px" id="text_result">Resultado: 0 Artigos encontrados</p>
     </div>
     <div>
         <table id="table">
@@ -101,9 +101,10 @@ tr:hover {background-color: #D6EEEE;}
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
-    //DELETAR ISSO MAIS TARDE
     // Durante carregamento de pagina, pegar um JSON transformar numa table com tamanho dinamico
     $.getJSON( "/json?cpf={{cpf}}&search={{query}}&total={{total}}", function( data ) {
+        var length = data.length;
+        document.getElementById("text_result").innerText = "Resultado: " + length + " Artigos encontrados";
         table = document.getElementById("table");
         for(var i = 0; i < data.length; i++){
             var newRow = table.insertRow();

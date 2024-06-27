@@ -1,7 +1,9 @@
+import csv
 import json
 
-from flask import Blueprint, render_template, request, jsonify, redirect, url_for
-from sqLite import register_user, logar, esquece_senha, registra_artigo, trocar_senha, procura_artigos
+from flask import Blueprint, render_template, request, jsonify, redirect, url_for, send_file
+import sqLite
+import chroma_search as chromadb
 import arxiv_search
 views = Blueprint(__name__, "views")
 
@@ -17,7 +19,7 @@ def forgot_password():
     email = request.args.get("email")  # confere se foi recebido um email como parametro
     # se não foi, renderiza a tela pedindo apenas o email
     if email is not None:
-        esquece_senha(email)
+        sqLite.esquece_senha(email)
         return render_template("forgot_password.html", success="false")
     # se foi, renderiza também a mensagem de sucesso, e envia o email para o usuario
     return render_template("forgot_password.html", success="true")
@@ -43,7 +45,7 @@ def menu():
         form = request.form
         cpf = form.get('user')
         password = form.get('psswrdHsh')
-        status = logar(cpf, password)
+        status = sqLite.logar(cpf, password)
         error = "false"
         if status[0]:
             return render_template("home.html", cpf=cpf, login_error="false")
@@ -70,7 +72,7 @@ def search_articles():
 
 @views.route("/saved", methods=["GET", "POST"])
 def saved_articles():
-    cpf=""
+    cpf = ""
     if request.method == "GET":
         arg = request.args
         query = arg.get("search")
@@ -87,7 +89,7 @@ def change_password():
         cpf = form.get('cpf')
         senha_antiga = form.get("old_password")
         senha_nova = form.get("new_password")
-        codigo = trocar_senha(cpf, senha_antiga, senha_nova)
+        codigo = sqLite.trocar_senha(cpf, senha_antiga, senha_nova)
         return render_template("change_password.html", cpf=cpf, code=codigo[1])
     elif request.method == "GET":
         arg = request.args
@@ -116,7 +118,7 @@ def add_user():
     password = form.get("password")
 
     cep_string = f"{cep}, {street}, {city}, {state}"
-    register_user(username, age, cpf, email, cep_string, password)
+    sqLite.register_user(username, age, cpf, email, cep_string, password)
     return render_template("register_user.html", success="false")
     # return redirect(url_for("views.home"))
 
@@ -128,29 +130,39 @@ def get_json():
     search_query = args.get("search")
     search_size = int(args.get("total"))
     # Realizar a pesquisa e salvar numa lista nova
-    artigos = arxiv_search.search(search_query, search_size, cpf)
+    artigos = chromadb.pesquisar_artigos(search_query, search_size, cpf)
     lista = list()
     for artigo in artigos:
-        #json.dumps(lista.append(artigo.dict()))
         lista.append(artigo.dict())
-        registra_artigo(artigo)
     return lista
 
 @views.route("/get_articles", methods=["GET"])
 def get_articles():
-    cpf = request.args.get("cpf")
-    artigos = procura_artigos(cpf)[0]
+    args = request.args
+    cpf = args.get("cpf")
+    if args.get("search") == "None" or args.get("total") == "None":
+        artigos = sqLite.procura_artigos(cpf)[0]
+    else:
+        search_query = args.get("search")
+        search_size = int(args.get("total"))
+        artigos = chromadb.pesquisar_salvos(search_query, search_size, cpf)
     output = list()
     for artigo in artigos:
-        json.dumps(output.append(artigo.dict_full()))
+        output.append(artigo.dict_full())
     return output
 
-@views.route("/data")
-def get_data():
-    data = request.json
-    return jsonify(data)
-
-
-@views.route("/go-to-gome")
-def go_to_home():
-    return redirect(url_for("views.get_json"))
+@views.route("/download", methods=["GET"])
+def download():
+    path = "temp.csv"
+    cpf = request.args.get("cpf")
+    with open(path, 'w') as file:
+        fields = ["id", "title", "summary", "link", "query", "cpf_user"]
+        # procura todos os artigos salvos na conta do usuario
+        artigos = sqLite.procura_artigos(cpf)[0]
+        lista_dicts = list()
+        for artigo in artigos:
+            lista_dicts.append(artigo.dict_full())
+        writer = csv.DictWriter(file, fieldnames=fields, delimiter=";")
+        writer.writeheader()
+        writer.writerows(lista_dicts)
+    return send_file(path, as_attachment=True)

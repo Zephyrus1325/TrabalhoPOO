@@ -9,7 +9,7 @@ class Artigo:
     def __init__(self, ident, title, resume, link, cpf_user, search_query):
         self.identifier = ident
         self.title = title
-        self.summary = resume
+        self.summary = resume.replace("\n", " ")
         self.link = link
         self.cpf_user = cpf_user
         self.search_query = search_query

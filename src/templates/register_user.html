@@ -79,7 +79,7 @@ span.psw {
 <body>
 <div class="header">
     <img src="https://th.bing.com/th/id/R.7fa3cb7910152a31cb025bbacb9ca38c?rik=gsHmAXKZIDFj1g&riu=http%3a%2f%2fcampusmontanha.yolasite.com%2fresources%2f386px-Logotipo_IFET.png&ehk=Gx5SrlD%2b1OExNKJqCp70B1GzIZU9zHWYfhB9LMubK4k%3d&risl=&pid=ImgRaw&r=0" height=37px style="float: right; margin:5px;">
-    <p style="margin-left: 15px; font-size:15px">Trabalho Poo - Registrar Usuário</p>
+    <p style="margin-left: 15px; font-size:15px">Trabalho POO - Registrar Usuário</p>
 </div>
 
 <p style="padding:10px;"></p>
@@ -95,7 +95,7 @@ span.psw {
 
     <br>
     <label for="age" class="form-text">Idade</label><br>
-    <input type="age" name="age" pattern="[0-9]{1,3}" maxlength="3" required style="width:10%">
+    <input type="number" name="age" pattern="[0-9]{1,3}" maxlength="3" min="0" max="150" required style="width:10%">
 
     <br>
     <label for="email" class="form-text">Email</label><br>
@@ -103,21 +103,21 @@ span.psw {
 
     <br>
     <label for="cpf" class="form-text">CPF (apenas numeros)</label><br>
-    <input type="text" placeholder="insira CPF" pattern="[0-9]{11}" name="cpf" maxlength="11" required style="width: 20%;">
+    <input type="text" placeholder="Insira CPF" pattern="[0-9]{11}" name="cpf" maxlength="11" required style="width: 20%;">
 
-    <!-- Trecho com as coisas do CEP (tem que automatizar isso (aff)) -->
+    <!-- Trecho com as coisas do CEP (tudo automatizado :) ) -->
 
     <br>
     <label for="cep" class="form-text">CEP</label><br>
-    <input type="text" placeholder="insira CEP" pattern="[0-9]{8}" name="cep" maxlength="8" required style="width: 20%;" onchange="checkCEP(this.value)">
+    <input type="text" placeholder="Insira CEP" pattern="[0-9]{8}" name="cep" maxlength="8" required style="width: 20%;" onchange="checkCEP(this.value)">
 
     <br>
     <label for="street" class="form-text">Rua</label><br>
-    <input type="text" id="rua" placeholder="insira sua Rua" name="street" required>
+    <input type="text" id="rua" placeholder="Insira sua Rua" name="street" required>
 
     <br>
     <label for="city" class="form-text">Cidade</label><br>
-    <input type="text"  pattern="[A-Za-z]{1,}" id="cidade" placeholder="insira sua Cidade" name="city" required style="width:30%">
+    <input type="text"  pattern="[A-Za-z]{1,}" id="cidade" placeholder="Insira sua Cidade" name="city" required style="width:30%">
 
     <br>
     <label for="state" class="form-text">Estado</label><br>
@@ -175,7 +175,7 @@ span.psw {
     }
 
     function checkForm(){
-        alert("form enviado");
+        alert("");
     }
 
     function checkCEP(input) {

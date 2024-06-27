@@ -71,6 +71,35 @@ def esquece_senha(email):
         return erro_email_existe  # Retorna o código de erro - 6
 
 
+def buscar_nome(email):
+    try:
+        # Conectar ao banco de dados
+        conn = sqlite3.connect('banco_dados.db')
+        cursor = conn.cursor()
+
+        # Consulta SQL para buscar o e-mail pelo CPF
+        consulta = 'SELECT nome FROM clientes WHERE email = ?'
+
+        # Executar a consulta SQL com o CPF fornecido
+        cursor.execute(consulta, (email,))
+
+        # Obter o resultado da consulta
+        resultado = cursor.fetchone()
+
+        # Fechar o cursor e a conexão com o banco de dados
+        cursor.close()
+        conn.close()
+
+        # Verificar se o e-mail foi encontrado e retorná-lo
+        if resultado:
+            return True, str(resultado[0])  # Retorna o e-mail, sem erro
+        else:
+            return False, None  # não encontrou, retorna falso, sem erro
+    except Exception:
+        return False, 45  # Retorna o erro
+
+
+
 def buscar_email_por_cpf(CPF):
     try:
         # Conectar ao banco de dados
@@ -201,7 +230,7 @@ def procura_artigos(cpf):
         else:
             return False, None
     except sqlite3.Error as erro:
-        print(erro)
+        print("SQL ERORR: ", erro)
         return False, 89  # código de erro
 
 def procura_artigo(id, cpf):
@@ -211,15 +240,13 @@ def procura_artigo(id, cpf):
     try:
         cursor.execute('SELECT * FROM artigos WHERE cpf_user = ? AND identifier = ?', (cpf,id))
         linha = cursor.fetchone()
-        artigos = list()
-        artigo = Artigo(linha[1], linha[2], linha[3], linha[4], linha[5], linha[6])
-        artigos.append(artigo)
-        if artigos is not None:
-            return artigos, None
+        if linha is not None:
+            artigo = Artigo(linha[1], linha[2], linha[3], linha[4], linha[5], linha[6])
+            return artigo, None
         else:
             return False, None
     except sqlite3.Error as erro:
-        print(erro)
+        print("SQL ERROR: ", erro)
         return False, 89  # código de erro
 
 
