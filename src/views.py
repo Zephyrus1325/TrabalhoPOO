@@ -7,40 +7,47 @@ import chroma_search as chromadb
 import arxiv_search
 views = Blueprint(__name__, "views")
 
-
+# Tela Inicial do Sistema
 @views.route("/")
 def home():
+    # Renderiza apenas a tela inicial
     return render_template("index.html")
 
 
-
+# Tela de Esqueci Senha
 @views.route("/forgot_password")
 def forgot_password():
     email = request.args.get("email")  # confere se foi recebido um email como parametro
     # se não foi, renderiza a tela pedindo apenas o email
     if email is not None:
-        sqLite.esquece_senha(email)
-        return render_template("forgot_password.html", success="false")
-    # se foi, renderiza também a mensagem de sucesso, e envia o email para o usuario
-    return render_template("forgot_password.html", success="true")
+        sqLite.esquece_senha(email) # Envia mensagem de email com a senha nova
+        # Renderiza a tela com mensagem de sucesso
+        return render_template("forgot_password.html", success="true")
+    # Renderiza a tela sem mensagem de sucesso
+    return render_template("forgot_password.html", success="false")
 
-
+# Tela de Registrar Usuário
 @views.route("/register_user")
 def register():
     return render_template("register_user.html", success="true")
 
 
-
+# Menu Principal do sistema
 @views.route("/menu", methods=["GET", "POST"])
 def menu():
+    error = "true"
+    # Recebe os parametros via GET
     if request.method == "GET":
         arg = request.args
         cpf = arg.get("cpf")
         error = "false"
-        if cpf is None:
-            # se não tiver o cpf no link, jogar como erro
-            error = "true"
+        # Checa se o usuário existe no sistema
+        nome = sqLite.checar_cpf(cpf)[0]
+        if nome is False or None:
+            # Jogar um erro caso não haja o CPF
+            return redirect(url_for("views.home"))
 
+    # Recebe Parametros do Formulário
     elif request.method == "POST":
         form = request.form
         cpf = form.get('user')
@@ -49,14 +56,9 @@ def menu():
         error = "false"
         if status[0]:
             return render_template("home.html", cpf=cpf, login_error="false")
-        return render_template("home.html", cpf=cpf, login_error="true")
-    return render_template("home.html", cpf=cpf, login_error=error)
+    return render_template("home.html", cpf=cpf, login_error="true")
 
-    # botar codigo que confirma se o usuario é valido
-    # se usuario não for valido, mandar para a pagina de login de novo
-
-
-
+# Página de Pesquisa
 @views.route("/search", methods=["GET"])
 def search_articles():
     cpf = ""
@@ -65,11 +67,13 @@ def search_articles():
         query = arg.get("search")
         search_total = arg.get("total_search")
         cpf = arg.get("cpf")
+
+        # confere se não há nenhum parametro de pesquisa
         if query is not None and search_total is not None:
             return render_template("search_articles.html", cpf=cpf, query=query, total=search_total)
     return render_template("search_articles.html", cpf=cpf, query="", total=0)
 
-
+# Página de artigos salvos
 @views.route("/saved", methods=["GET", "POST"])
 def saved_articles():
     cpf = ""
@@ -81,6 +85,7 @@ def saved_articles():
         return render_template("saved_articles.html", cpf=cpf, query=query, total=search_total)
     return render_template("saved_articles.html", cpf=cpf, query="", total=0)
 
+# Página de alterar Senha
 @views.route("/change_password", methods=["GET", "POST"])
 def change_password():
 
@@ -103,7 +108,7 @@ def change_password():
     cpf = ""
     return render_template("change_password.html", cpf=cpf, code=30)
 
-
+#Link de suporte com que adiciona um usuário
 @views.route("/add_user", methods=["GET","POST"])
 def add_user():
     form = request.form
@@ -122,7 +127,7 @@ def add_user():
     return render_template("register_user.html", success="false")
     # return redirect(url_for("views.home"))
 
-
+# Link de suporte que retorna um Json com os artigos pesquisados
 @views.route("/json", methods=["GET"])
 def get_json():
     args = request.args
@@ -136,6 +141,7 @@ def get_json():
         lista.append(artigo.dict())
     return lista
 
+# Link de suporte que retorna os Artigos Salvos de um determinado usuário
 @views.route("/get_articles", methods=["GET"])
 def get_articles():
     args = request.args
@@ -151,6 +157,7 @@ def get_articles():
         output.append(artigo.dict_full())
     return output
 
+# link de suporte que baixa o arquivo do usuario
 @views.route("/download", methods=["GET"])
 def download():
     path = "temp.csv"

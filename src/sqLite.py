@@ -275,26 +275,18 @@ def trocar_senha(CPF, senha, nova_senha):
         cursor.close()
         conn.close()
 
-# ALERTA: CUIDADO AO CHAMAR ESSA FUNÇÃO, USAR APENAS EM AMBIENTE DE TESTES!
-# TODO DELETAR ESSA FUNÇÃO ANTES DE ENTREGAR
-def deleta_artigos():
-    # Conecta ao banco de dados
+
+def checar_cpf(cpf):
     conn = sqlite3.connect('banco_dados.db')
     cursor = conn.cursor()
 
     try:
-
-        deletar_artigos = '''
-            DROP TABLE IF EXISTS artigos
-            '''
-
-        cursor.execute(deletar_artigos)  # deleta a tabela de artigos
-        conn.commit()
-
-        return True, 70  # Operação bem-sucedida
-    except Exception:
-        return False, 33  # Código de erro
-    finally:
-        # Fecha a conexão com o banco de dados
-        cursor.close()
-        conn.close()
+        cursor.execute('SELECT name FROM usuarios WHERE CPF = ?', (cpf,))
+        nome = cursor.fetchone()
+        if nome is not None:
+            return nome, None
+        else:
+            return False, None
+    except sqlite3.Error as erro:
+        print("SQL ERROR: ", erro)
+        return False, 89  # código de erro
