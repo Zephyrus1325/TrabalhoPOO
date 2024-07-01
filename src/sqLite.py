@@ -82,7 +82,7 @@ def buscar_nome(email):
         cursor = conn.cursor()
 
         # Consulta SQL para buscar o e-mail pelo CPF
-        consulta = 'SELECT nome FROM clientes WHERE email = ?'
+        consulta = 'SELECT nome FROM usuarios WHERE email = ?'
 
         # Executar a consulta SQL com o CPF fornecido
         cursor.execute(consulta, (email,))
@@ -96,9 +96,9 @@ def buscar_nome(email):
 
         # Verificar se o e-mail foi encontrado e retorná-lo
         if resultado:
-            return True, str(resultado[0])  # Retorna o e-mail, sem erro
+            return str(resultado[0]), 0  # Retorna o e-mail, sem erro
         else:
-            return False, None  # não encontrou, retorna falso, sem erro
+            return False, 0  # não encontrou, retorna falso, sem erro
     except Exception:
         return False, 45  # Retorna o erro
 

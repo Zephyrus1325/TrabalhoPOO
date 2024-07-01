@@ -14,7 +14,7 @@ def gerar_senha():
 
 
 def enviar_email(email_usuario, nova_senha):
-    username = sqLite.buscar_nome(email_usuario)
+    username = sqLite.buscar_nome(email_usuario)[0]
     sender = "geraldosena371@gmail.com"
     body = f"Olá {username}!, sua nova senha é: {nova_senha}"
     subject = "Nova senha"

@@ -4,12 +4,10 @@
 # BERNARDO FERRI SCHIRMER
 
 import csv
-import json
 
-from flask import Blueprint, render_template, request, jsonify, redirect, url_for, send_file
+from flask import Blueprint, render_template, request, redirect, url_for, send_file
 import sqLite
 import chroma_search as chromadb
-import arxiv_search
 views = Blueprint(__name__, "views")
 
 
@@ -43,6 +41,7 @@ def register():
 @views.route("/menu", methods=["GET", "POST"])
 def menu():
     error = "true"
+    cpf = ""
     # Recebe os parametros via GET
     if request.method == "GET":
         arg = request.args
@@ -112,16 +111,11 @@ def change_password():
         arg = request.args
         cpf = arg.get('cpf')
         return render_template("change_password.html", cpf=cpf, code=0)
-    else:
-        # deveria jogar um erro, porque tem que receber pelo menos um get com o CPF
-        "do nothing, for now"
-        # TODO Adicionar um jeito de corrigir esse problema
-        # Meu deus, programar um projeto grande só vai acumulando problema atras de problema, aff
     cpf = ""
     return render_template("change_password.html", cpf=cpf, code=30)
 
 
-#Link de suporte com que adiciona um usuário
+# Link de suporte com que adiciona um usuário
 @views.route("/add_user", methods=["GET","POST"])
 def add_user():
     form = request.form
@@ -173,7 +167,7 @@ def get_articles():
     return output
 
 
-# link de suporte que baixa o arquivo do usuario
+# Link de suporte que baixa a planilha com os artigos do usuário
 @views.route("/download", methods=["GET"])
 def download():
     path = "Artigos.csv"
