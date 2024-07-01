@@ -281,7 +281,7 @@ def checar_cpf(cpf):
     cursor = conn.cursor()
 
     try:
-        cursor.execute('SELECT name FROM usuarios WHERE CPF = ?', (cpf,))
+        cursor.execute('SELECT nome FROM usuarios WHERE CPF = ?', (cpf,))
         nome = cursor.fetchone()
         if nome is not None:
             return nome, None

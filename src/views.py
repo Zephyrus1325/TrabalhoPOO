@@ -43,10 +43,12 @@ def menu():
         error = "false"
         # Checa se o usuário existe no sistema
         nome = sqLite.checar_cpf(cpf)[0]
+        print(nome)
         if nome is False or None:
             # Jogar um erro caso não haja o CPF
             return redirect(url_for("views.home"))
-
+        # Caso constrario, renderizar a tela normalmente
+        return render_template("home.html", cpf=cpf, login_error="false")
     # Recebe Parametros do Formulário
     elif request.method == "POST":
         form = request.form
@@ -160,7 +162,7 @@ def get_articles():
 # link de suporte que baixa o arquivo do usuario
 @views.route("/download", methods=["GET"])
 def download():
-    path = "temp.csv"
+    path = "Artigos.csv"
     cpf = request.args.get("cpf")
     with open(path, 'w') as file:
         fields = ["id", "title", "summary", "link", "query", "cpf_user"]

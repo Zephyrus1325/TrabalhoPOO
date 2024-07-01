@@ -97,12 +97,17 @@ tr:hover {background-color: #D6EEEE;}
                 <th>Link</th>
             </tr>
         </table>
-        <img id="pooh" src="https://i.pinimg.com/originals/ec/a3/37/eca33743d68b76ebb3ee4939e2119c7f.gif">
+        <div style="width:100%; display: flex; justify-content:center">
+            <img height="150px" id="loading_gif" src="https://media.tenor.com/t5DMW5PI8mgAAAAi/loading-green-loading.gif">
+        </div>
     </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
     // Durante carregamento de pagina, pegar um JSON transformar numa table com tamanho dinamico
+    if({{total}} == 0){
+        document.getElementById("loading_gif").style.opacity = "0.0";
+    }
     $.getJSON( "/json?cpf={{cpf}}&search={{query}}&total={{total}}", function( data ) {
         var length = data.length;
 
@@ -113,7 +118,7 @@ tr:hover {background-color: #D6EEEE;}
             newRow.innerHTML = "<td>"+data[i].id+"</td><td>"+data[i].title+"</td><td>"+data[i].summary+"</td><td>"+data[i].link+"</td>"
             //console.log(data[i]);
         }
-        document.getElementById("pooh").style.opacity = "0.0";
+        document.getElementById("loading_gif").style.opacity = "0.0";
     });
 
 </script>
