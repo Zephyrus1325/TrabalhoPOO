@@ -1,14 +1,20 @@
+# COMPONENTES DO GRUPO:
+# MARCO AURÉLIO TIAGO FILHO
+# JOÃO VICTOR FERREIA ABRÊU
+# BERNARDO FERRI SCHIRMER
+
+import secrets
+import smtplib
+import sqLite
+from email.mime.text import MIMEText # pra codificar as mensagen
+
 def gerar_senha():
-    import secrets
     nova_senha = secrets.token_urlsafe(5)
     return nova_senha
 
 
 def enviar_email(email_usuario, nova_senha):
-    import smtplib
-    import sqLite
     username = sqLite.buscar_nome(email_usuario)
-    from email.mime.text import MIMEText  # pra codificar as mensagen
     sender = "geraldosena371@gmail.com"
     body = f"Olá {username}!, sua nova senha é: {nova_senha}"
     subject = "Nova senha"

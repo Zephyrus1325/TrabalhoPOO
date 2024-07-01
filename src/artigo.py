@@ -1,3 +1,8 @@
+# COMPONENTES DO GRUPO:
+# MARCO AURÉLIO TIAGO FILHO
+# JOÃO VICTOR FERREIA ABRÊU
+# BERNARDO FERRI SCHIRMER
+
 # Classe artigo:
 # Classe usada majoritariamente para as transações de informações de artigos entre os vários codigos
 class Artigo:
@@ -9,6 +14,7 @@ class Artigo:
     cpf_user = ""
     search_query = ""
 
+
     # Construtor da classe Artigo
     def __init__(self, ident, title, resume, link, cpf_user, search_query):
         self.identifier = ident
@@ -18,10 +24,12 @@ class Artigo:
         self.cpf_user = cpf_user
         self.search_query = search_query
 
+
     # Retorna um dicionário com apenas os atributos relevantes do Artigo
     # (vindo do chromadb)
     def dict(self):
         return {"id": self.identifier, "title": self.title, "summary": self.summary, "link": self.link}
+
 
     # Retorna um dicionario com todos os atributos do Artigo
     # (inclui CPF do "dono" do artigo e palavra usada para achar ele)

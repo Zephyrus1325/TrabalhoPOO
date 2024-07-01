@@ -1,3 +1,8 @@
+# COMPONENTES DO GRUPO:
+# MARCO AURÉLIO TIAGO FILHO
+# JOÃO VICTOR FERREIA ABRÊU
+# BERNARDO FERRI SCHIRMER
+
 import chromadb
 import arxiv_search as arxiv
 import sqLite
@@ -61,6 +66,8 @@ def pesquisar_artigos (keyword, quantidade, cpf_user):
     for id in lista_id:
         lista_results.append(sqLite.procura_artigo(id, cpf_user)[0]) #Retorna um único Artigo
     return lista_results
+
+
 #Procura de Artigos Salvos no Banco de Dados do SQLite
 def pesquisar_salvos(keyword, quantidade, cpf):
     ids = pesquisa(keyword, quantidade, cpf)

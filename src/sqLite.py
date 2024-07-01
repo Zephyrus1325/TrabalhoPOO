@@ -1,5 +1,12 @@
+# COMPONENTES DO GRUPO:
+# MARCO AURÉLIO TIAGO FILHO
+# JOÃO VICTOR FERREIA ABRÊU
+# BERNARDO FERRI SCHIRMER
+
 import sqlite3
 from artigo import Artigo
+from util import enviar_email, gerar_senha
+
 
 def register_user(nome, idade, CPF, email, CEP, senha):
     # Conecta ao banco de dados SQLite (ou cria se ele não existir)
@@ -38,9 +45,6 @@ def register_user(nome, idade, CPF, email, CEP, senha):
 
 
 def esquece_senha(email):
-
-    from util import enviar_email
-    from util import gerar_senha
 
     sim, erro_email_existe = email_existe(email)
 
@@ -97,7 +101,6 @@ def buscar_nome(email):
             return False, None  # não encontrou, retorna falso, sem erro
     except Exception:
         return False, 45  # Retorna o erro
-
 
 
 def buscar_email_por_cpf(CPF):
@@ -233,6 +236,7 @@ def procura_artigos(cpf):
         print("SQL ERORR: ", erro)
         return False, 89  # código de erro
 
+
 def procura_artigo(id, cpf):
     conn = sqlite3.connect('banco_dados.db')
     cursor = conn.cursor()
@@ -248,7 +252,6 @@ def procura_artigo(id, cpf):
     except sqlite3.Error as erro:
         print("SQL ERROR: ", erro)
         return False, 89  # código de erro
-
 
 
 def trocar_senha(CPF, senha, nova_senha):

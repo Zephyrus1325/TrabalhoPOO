@@ -1,3 +1,8 @@
+# COMPONENTES DO GRUPO:
+# MARCO AURÉLIO TIAGO FILHO
+# JOÃO VICTOR FERREIA ABRÊU
+# BERNARDO FERRI SCHIRMER
+
 import csv
 import json
 
@@ -6,6 +11,7 @@ import sqLite
 import chroma_search as chromadb
 import arxiv_search
 views = Blueprint(__name__, "views")
+
 
 # Tela Inicial do Sistema
 @views.route("/")
@@ -25,6 +31,7 @@ def forgot_password():
         return render_template("forgot_password.html", success="true")
     # Renderiza a tela sem mensagem de sucesso
     return render_template("forgot_password.html", success="false")
+
 
 # Tela de Registrar Usuário
 @views.route("/register_user")
@@ -60,6 +67,7 @@ def menu():
             return render_template("home.html", cpf=cpf, login_error="false")
     return render_template("home.html", cpf=cpf, login_error="true")
 
+
 # Página de Pesquisa
 @views.route("/search", methods=["GET"])
 def search_articles():
@@ -75,6 +83,7 @@ def search_articles():
             return render_template("search_articles.html", cpf=cpf, query=query, total=search_total)
     return render_template("search_articles.html", cpf=cpf, query="", total=0)
 
+
 # Página de artigos salvos
 @views.route("/saved", methods=["GET", "POST"])
 def saved_articles():
@@ -86,6 +95,7 @@ def saved_articles():
         cpf = arg.get("cpf")
         return render_template("saved_articles.html", cpf=cpf, query=query, total=search_total)
     return render_template("saved_articles.html", cpf=cpf, query="", total=0)
+
 
 # Página de alterar Senha
 @views.route("/change_password", methods=["GET", "POST"])
@@ -110,6 +120,7 @@ def change_password():
     cpf = ""
     return render_template("change_password.html", cpf=cpf, code=30)
 
+
 #Link de suporte com que adiciona um usuário
 @views.route("/add_user", methods=["GET","POST"])
 def add_user():
@@ -129,6 +140,7 @@ def add_user():
     return render_template("register_user.html", success="false")
     # return redirect(url_for("views.home"))
 
+
 # Link de suporte que retorna um Json com os artigos pesquisados
 @views.route("/json", methods=["GET"])
 def get_json():
@@ -142,6 +154,7 @@ def get_json():
     for artigo in artigos:
         lista.append(artigo.dict())
     return lista
+
 
 # Link de suporte que retorna os Artigos Salvos de um determinado usuário
 @views.route("/get_articles", methods=["GET"])
@@ -158,6 +171,7 @@ def get_articles():
     for artigo in artigos:
         output.append(artigo.dict_full())
     return output
+
 
 # link de suporte que baixa o arquivo do usuario
 @views.route("/download", methods=["GET"])
